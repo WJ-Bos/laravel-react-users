@@ -13,6 +13,15 @@ function SignUp(props) {
 
   const  {setUser,setToken} = useStateContext();
 
+  /**
+   * Handles the submission of the sign up form.
+   * Prevents the default form submission behavior.
+   * Extracts the values from the form fields.
+   * Makes a POST request to the API's signup endpoint.
+   * If the request is successful, updates the user and token state with the response.
+   * If the request is not successful, logs the error to the console.
+   * @param {Event} event - The form submission event.
+   */
   const handleSubmit = (event) => {
     event.preventDefault();
     const payload = {
