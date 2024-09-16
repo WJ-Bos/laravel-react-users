@@ -10,26 +10,22 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function login(LoginRequest $request){
+    public function signup(SignupRequest $request){
 
-        $data = $request -> validated();
+        $data = $request->validated();
 
-        /** @var \App\Models\User $user */
-        User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
 
-        $token  = $user->createToken('main')->accessToken;
+        $token = $user->createToken('main')->plainTextToken;
 
-        return response([
-            'user' => $user,
-            'token' => $token
-        ]);
+        return compact('user', 'token');
     }
 
-    public function signup(SignupRequest $signupRequest){
+    public function login(LoginRequest $request){
 
     }
 
