@@ -8,20 +8,13 @@ function SignUp(props) {
 
   const nameRef = useRef();
   const emailRef = useRef();
-  const passwordRef =useRef();
-  const confirmPasswordRef =useRef();
+  const passwordRef = useRef();
+  const confirmPasswordRef = useRef();
 
- const {setToken,setUser} = useStateContext();
+  const [signupErrors, setSignupErrors] = useState(null);
 
-  /**
-   * Handles the submission of the sign up form.
-   * Prevents the default form submission behavior.
-   * Extracts the values from the form fields.
-   * Makes a POST request to the API's signup endpoint.
-   * If the request is successful, updates the user and token state with the response.
-   * If the request is not successful, logs the error to the console.
-   * @param {Event} event - The form submission event.
-   */
+  const {setToken, setUser} = useStateContext();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const payload = {
@@ -30,15 +23,18 @@ function SignUp(props) {
       password: passwordRef.current.value,
       confirm_password: confirmPasswordRef.current.value
     }
-    axiosClient.post('signup',payload)
-      .then(({data}) =>{
+    console.log(payload);
+
+    axiosClient.post('/signup', payload)
+      .then(({data}) => {
         setUser(data.user);
         setToken(data.token);
+        debugger;
       })
-      .catch((err) =>{
+      .catch((err) => {
         const response = err.response;
-        if(response && response.status === 422){ //422 validation error
-         console.log( response.data.errors);
+        if (response && response.status === 422) { //422 validation error
+          setSignupErrors(response.data.errors);
         }
       })
   }
@@ -49,6 +45,15 @@ function SignUp(props) {
         className="flex w-[60%] relative flex-col sm:max-w-[40%] md:max-w-[40%] lg:max-w-[40%] rounded-sm p-4 border-white border-[1px] border-opacity-60 shadow-bottom-right shadow-neutral-500">
         <div className="flex flex-col mb-4">
           <h1 className="font-bold text-xl pt-2 pl-3">Sign Up</h1>
+          {
+            signupErrors && <div className="flex bg-red-500 rounded-sm p-2 text-white">
+              {
+               Object.keys(signupErrors).map((key) =>(
+                 <p className="text-md" key={key}>{signupErrors[key][0]}</p>
+               ))
+              }
+            </div>
+          }
           <label className="font-normal text-xs pl-3 text-neutral-400 mt-[4px]">Create a new account</label>
         </div>
         <div className="mt-4 flex flex-col">
