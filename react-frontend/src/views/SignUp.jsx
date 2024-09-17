@@ -11,7 +11,7 @@ function SignUp(props) {
   const passwordRef =useRef();
   const confirmPasswordRef =useRef();
 
-  const  {setUser,setToken} = useStateContext();
+ const {setToken,setUser} = useStateContext();
 
   /**
    * Handles the submission of the sign up form.
