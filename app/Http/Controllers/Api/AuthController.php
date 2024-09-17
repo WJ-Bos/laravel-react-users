@@ -60,10 +60,18 @@ class AuthController extends Controller
 
 
 
-    public  function logout(Request $request){
-        /**@var User $user*/
+    /**
+     * Logs the user out and deletes the token.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        /** @var User $user */
         $user = $request->user();
         $user->currentAccessToken()->delete();
+
         return response('', 204);
     }
 }
